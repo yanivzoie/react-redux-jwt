@@ -12,7 +12,6 @@ app.get('/', (req, res) => {
 
 //Import Routes
 const authRoute = require('./routes/auth');
-const locations = require('./routes/locations');
 
 //Middlewares
 app.use(bodyParser.json());
