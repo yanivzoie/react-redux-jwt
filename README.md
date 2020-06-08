@@ -1,10 +1,8 @@
 ## Available Scripts
 
-### `npm install`
+### `run npm install from the client and from the server`
 
 ### `from the server directory run: npm run dev`
-
-
 
 this project run with concurrently so both server and client will run
 <br />
