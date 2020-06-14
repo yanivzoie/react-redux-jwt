@@ -88,14 +88,4 @@ router.get('/user', verifyToken, async (req, res) => {
   }
 });
 
-// router.get('/locations', verifyToken, async (req, res) => {
-//   try {
-//     const items = await store.read();
-//     if (!items) throw Error('No items');
-//     res.status(200).json(items.locations);
-//   } catch (e) {
-//     res.status(400).json({ msg: e.message });
-//   }
-// });
-
 module.exports = router;

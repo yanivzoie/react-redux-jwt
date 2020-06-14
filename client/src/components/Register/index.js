@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles.scss';
 import {
   Button,
@@ -15,51 +15,52 @@ import {
 import { connect } from 'react-redux';
 import { register } from '../../redux/actions/authActions';
 import { clearErrors } from '../../redux/actions/errorActions';
+import { usePrevious } from '../../hooks/usePrevious';
 
-class Register extends Component {
-  state = {
-    modal: false,
-    name: '',
+const Register = (props) => {
+  const [modal, setModal] = useState(false);
+  const [msg, setMsg] = useState('');
+
+  const [userCredentials, setUserCredentials] = useState({
     email: '',
     password: '',
-    msg: null,
-  };
+    name: '',
+  });
 
-  componentDidUpdate(prevProps) {
-    const { error, isAuthenticated } = this.props;
-    if (error !== prevProps.error) {
+  const prevProps = usePrevious(props);
+
+  useEffect(() => {
+    if (props.error !== prevProps) {
       // Check for register error
-      if (error.id === 'REGISTER_FAIL') {
-        this.setState({ msg: error.msg.msg });
+      if (props.error.id === 'REGISTER_FAIL') {
+        setMsg(props.error.msg.msg);
       } else {
-        this.setState({ msg: null });
+        setMsg(null);
       }
     }
 
     // If authenticated, close modal
-    if (this.state.modal) {
-      if (isAuthenticated) {
-        this.toggle();
+    if (modal) {
+      if (props.isAuthenticated) {
+        toggle();
       }
     }
-  }
+  });
 
-  toggle = () => {
+  const toggle = () => {
     // Clear errors
-    this.props.clearErrors();
-    this.setState({
-      modal: !this.state.modal,
-    });
+    props.clearErrors();
+    setModal(!modal);
   };
 
-  onChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+  const onChange = (e) => {
+    const { value, name } = e.target;
+    setUserCredentials({ ...userCredentials, [name]: value });
   };
 
-  onSubmit = (e) => {
+  const onSubmit = (e) => {
+    const { name, email, password } = userCredentials;
     e.preventDefault();
-
-    const { name, email, password } = this.state;
 
     // Create user object
     const newUser = {
@@ -69,64 +70,60 @@ class Register extends Component {
     };
 
     // Attempt to register
-    this.props.register(newUser);
+    props.register(newUser);
   };
 
-  render() {
-    return (
-      <div>
-        <NavLink onClick={this.toggle} href="#">
-          Register
-        </NavLink>
+  return (
+    <div>
+      <NavLink onClick={toggle} href="#">
+        Register
+      </NavLink>
 
-        <Modal isOpen={this.state.modal} toggle={this.toggle}>
-          <ModalHeader toggle={this.toggle}>Register</ModalHeader>
-          <ModalBody>
-            {this.state.msg ? (
-              <Alert color="danger">{this.state.msg}</Alert>
-            ) : null}
-            <Form onSubmit={this.onSubmit}>
-              <FormGroup>
-                <Label for="name">Name</Label>
-                <Input
-                  type="text"
-                  name="name"
-                  id="name"
-                  placeholder="Name"
-                  className="mb-3"
-                  onChange={this.onChange}
-                />
+      <Modal isOpen={modal} toggle={toggle}>
+        <ModalHeader toggle={toggle}>Register</ModalHeader>
+        <ModalBody>
+          {msg ? <Alert color="danger">{msg}</Alert> : null}
+          <Form onSubmit={onSubmit}>
+            <FormGroup>
+              <Label for="name">Name</Label>
+              <Input
+                type="text"
+                name="name"
+                id="name"
+                placeholder="Name"
+                className="mb-3"
+                onChange={onChange}
+              />
 
-                <Label for="email">Email</Label>
-                <Input
-                  type="email"
-                  name="email"
-                  id="email"
-                  placeholder="Email"
-                  className="mb-3"
-                  onChange={this.onChange}
-                />
+              <Label for="email">Email</Label>
+              <Input
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Email"
+                className="mb-3"
+                onChange={onChange}
+              />
 
-                <Label for="password">Password</Label>
-                <Input
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="Password"
-                  className="mb-3"
-                  onChange={this.onChange}
-                />
-                <Button color="dark" style={{ marginTop: '2rem' }} block>
-                  Register
-                </Button>
-              </FormGroup>
-            </Form>
-          </ModalBody>
-        </Modal>
-      </div>
-    );
-  }
-}
+              <Label for="password">Password</Label>
+              <Input
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Password"
+                className="mb-3"
+                onChange={onChange}
+              />
+              <Button color="dark" style={{ marginTop: '2rem' }} block>
+                Register
+              </Button>
+            </FormGroup>
+          </Form>
+        </ModalBody>
+      </Modal>
+    </div>
+  );
+};
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
