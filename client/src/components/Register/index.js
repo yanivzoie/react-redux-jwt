@@ -15,7 +15,6 @@ import {
 import { connect } from 'react-redux';
 import { register } from '../../redux/actions/authActions';
 import { clearErrors } from '../../redux/actions/errorActions';
-import { usePrevious } from '../../hooks/usePrevious';
 
 const Register = (props) => {
   const [modal, setModal] = useState(false);
@@ -27,10 +26,8 @@ const Register = (props) => {
     name: '',
   });
 
-  const prevProps = usePrevious(props);
-
   useEffect(() => {
-    if (props.error !== prevProps) {
+    if (props.error !== props) {
       // Check for register error
       if (props.error.id === 'REGISTER_FAIL') {
         setMsg(props.error.msg.msg);

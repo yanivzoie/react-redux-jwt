@@ -14,7 +14,6 @@ import {
 import { connect } from 'react-redux';
 import { login } from '../../redux/actions/authActions';
 import { clearErrors } from '../../redux/actions/errorActions';
-import { usePrevious } from '../../hooks/usePrevious';
 
 export const Login = (props) => {
   const [modal, setModal] = useState(false);
@@ -25,10 +24,8 @@ export const Login = (props) => {
     password: '',
   });
 
-  const prevProps = usePrevious(props);
-
   useEffect(() => {
-    if (props.error !== prevProps) {
+    if (props.error !== props) {
       // Check for register error
       if (props.error.id === 'LOGIN_FAIL') {
         setMsg(props.error.msg.msg);

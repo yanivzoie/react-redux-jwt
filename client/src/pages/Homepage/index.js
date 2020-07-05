@@ -10,8 +10,8 @@ const HomePage = () => {
   });
 
   return (
-    <div className="container">
-      <h1>Hello Herolo</h1>
+    <div className="homepage">
+      <h1>Yaniv Zoie</h1>
     </div>
   );
 };

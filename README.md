@@ -1,17 +1,38 @@
-## Available Scripts
+# MERN App
 
-### `run npm install from the client and from the server`
+> This app built with the MERN stack along with Redux for state management.
 
-### `from the server directory run: npm run dev`
+## Quick Start
 
-this project run with concurrently so both server and client will run
-<br />
+```bash
+# Install dependencies for server
+npm install
 
-for start server only please run: npm run server
-<br />
+# Install dependencies for client
+npm run client-install
 
-for start client only please run: npm run client
-<br />
+# Run the client & server with concurrently
+npm run dev
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+# Run the Express server only
+npm run server
+
+# Run the React client only
+npm run client
+
+# Server runs on http://localhost:8000 and client on http://localhost:3000
+```
+
+## Deployment
+
+There is a Heroku post build script so that you do not have to compile your React frontend manually, it is done on the server. Simply push to Heroku and it will build and load the client index.html page
+
+## App Info
+
+### Author
+
+Yaniv Zoie
+
+### Version
+
+1.0.0
